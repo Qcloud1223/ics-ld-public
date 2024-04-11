@@ -32,3 +32,7 @@ be available in public (and it will be in Chinese).
 When we finish tuning the project and instructions,
 an English version will be posted here for those not enrolled in this course.
 So please stay tuned :)
+
+### TODO
+- [] Add debug mode in autograder
+- [] Test case for common block
