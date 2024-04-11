@@ -34,5 +34,5 @@ an English version will be posted here for those not enrolled in this course.
 So please stay tuned :)
 
 ### TODO
-- [] Add debug mode in autograder
-- [] Test case for common block
+- [ ] Add debug mode in autograder
+- [ ] Test case for common block
