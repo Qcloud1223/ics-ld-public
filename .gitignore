@@ -1,0 +1,6 @@
+.vscode/
+build/
+*.o
+tests/
+*.so
+testcases/test*
