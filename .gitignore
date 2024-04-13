@@ -4,3 +4,4 @@ build/
 tests/
 *.so
 testcases/test*
+*.out
