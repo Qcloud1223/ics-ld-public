@@ -25,8 +25,10 @@ void parseArgs(int argc, char **argv)
     ldConfig.isPIE = true;
     for (int i = 1; i < argc; i++) {
         if (strcmp("-o", argv[i]) == 0) {
-            ldConfig.outName = argv[i + 1];
-            i += 1;
+            if (i + 1 < argc) {
+                ldConfig.outName = argv[i + 1];
+                i += 1;
+            }
             continue;
         } else if (strcmp("-no-pie", argv[i]) == 0) {
             ldConfig.isPIE = false;
