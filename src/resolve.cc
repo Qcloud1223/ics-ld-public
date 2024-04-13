@@ -1,38 +1,22 @@
 #include "resolve.h"
 
 #include <iostream>
-#include <signal.h>
-#include <set>
-#include <vector>
 
-using std::set, std::string, std::cout, std::endl, std::vector, std::cerr;
+#define MULTIDEF 1
+#define NODEF 2
 
-struct errsym {
-    enum errtype {
-        OK,
-        MULTIDEF,
-        NODEF
-    };
-    int err;    // Error type
-    string sym; // Error symbol name
-};
+std::string errSymName;
 
-errsym callResolveSymbols(std::vector<ObjectFile> &allObjects);
+int callResolveSymbols(std::vector<ObjectFile> &allObjects);
 
 void resolveSymbols(std::vector<ObjectFile> &allObjects) {
-    errsym ret = callResolveSymbols(allObjects);
-    switch (ret.err)
-    {
-    case errsym::MULTIDEF:
-        cerr << "multiple definition for symbol " << ret.sym << endl;
+    int ret = callResolveSymbols(allObjects);
+    if (ret == MULTIDEF) {
+        std::cerr << "multiple definition for symbol " << errSymName << std::endl;
         abort();
-        break;
-    case errsym::NODEF:
-        cerr << "undefined reference for symbol " << ret.sym << endl;
+    } else if (ret == NODEF) {
+        std::cerr << "undefined reference for symbol " << errSymName << std::endl;
         abort();
-        break;
-    default:
-        break;
     }
 }
 
@@ -40,11 +24,11 @@ void resolveSymbols(std::vector<ObjectFile> &allObjects) {
  * Throw correct errors when a reference is not bound to definition,
  * or there is more than one definition.
  */
-errsym callResolveSymbols(std::vector<ObjectFile> &allObjects)
+int callResolveSymbols(std::vector<ObjectFile> &allObjects)
 {
     /* Your code here */
-    // if found multiple definition, return {errsym::MULTIDEF, "symbol name"};
-    // if no definition is found, return {errsym::NODEF, "symbol name"};
+    // if found multiple definition, set the errSymName to problematic symbol name and return MULTIDEF;
+    // if no definition is found, set the errSymName to problematic symbol name and return NODEF;
 
-    return {errsym::OK, ""};
+    return 0;
 }
