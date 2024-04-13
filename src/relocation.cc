@@ -4,7 +4,7 @@
 
 void rebaseRela(std::vector<ObjectFile> &allObject)
 {
-    
+    /* Your code here */
 }
 
 void handleRela(std::vector<ObjectFile> &allObject, ObjectFile &mergedObject, bool isPIE)
