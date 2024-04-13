@@ -44,7 +44,7 @@ class TestCase:
         print("Command: ", self.command)
         
         try:
-            retProc = subprocess.run(self.command, check=True, capture_output=True, encoding='utf-8')
+            _ = subprocess.run(self.command, check=True, capture_output=True, encoding='utf-8')
         except subprocess.CalledProcessError as e:
             if e.returncode == -signal.SIGSEGV:
                 print("SIGSEGV received in your linker. Maybe you want to debug it with gdb.")
@@ -68,7 +68,7 @@ class TestCase:
             return
 
         try:
-            retProc = subprocess.run(self.binName, check=True, capture_output=True, encoding='utf-8')
+            _ = subprocess.run(self.binName, check=True, capture_output=True, encoding='utf-8')
         except subprocess.CalledProcessError as e:
             if e.returncode == self.retVal:
                 self.claimedScore += self.score
