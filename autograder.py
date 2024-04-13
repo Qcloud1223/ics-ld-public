@@ -41,7 +41,7 @@ class TestCase:
     
     def eval(self):
         print("Test name:", self.name)
-        print("Command: ", self.command)
+        print("Command:", " ".join(self.command))
         
         try:
             _ = subprocess.run(self.command, check=True, capture_output=True, encoding='utf-8')
