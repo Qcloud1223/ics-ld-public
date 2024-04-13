@@ -96,7 +96,6 @@ ObjectFile parseObjectFile(int fd, bool modify)
     Elf64_Ehdr *ehdr = reinterpret_cast<Elf64_Ehdr *>(mmapRet);
     uint16_t shnum = ehdr->e_shnum;
     uint64_t shoff = ehdr->e_shoff;
-    uint64_t shlen = shnum * sizeof(Elf64_Shdr);
     Elf64_Shdr *shdr = reinterpret_cast<Elf64_Shdr *>((char *)mmapRet + shoff);
     char *shstrtab = (char *)mmapRet + shdr[ehdr->e_shstrndx].sh_offset;
 
