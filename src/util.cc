@@ -99,8 +99,8 @@ ObjectFile parseObjectFile(int fd, bool modify)
     Elf64_Shdr *shdr = reinterpret_cast<Elf64_Shdr *>((char *)mmapRet + shoff);
     char *shstrtab = (char *)mmapRet + shdr[ehdr->e_shstrndx].sh_offset;
 
-    bool hasSymtab = false, hasStrtab = false;
-    uint64_t symtabSize, symtabOff, strtabSize, strtabOff;
+    // bool hasSymtab = false, hasStrtab = false;
+    uint64_t symtabSize, symtabOff, strtabOff;
     for (int i = 0; i < shnum; i++) {
         const char *secName = shstrtab + shdr[i].sh_name;
         Section &s = o.sections[secName];
@@ -111,7 +111,6 @@ ObjectFile parseObjectFile(int fd, bool modify)
             symtabSize = shdr[i].sh_size;
             symtabOff = shdr[i].sh_offset;
         } else if (strcmp(secName, ".strtab") == 0) {
-            strtabSize = shdr[i].sh_size;
             strtabOff = shdr[i].sh_offset;
         }
     }
@@ -132,7 +131,7 @@ ObjectFile parseObjectFile(int fd, bool modify)
     char *strtab = (char *)mmapRet + strtabOff;
 
     Elf64_Sym *symtab = reinterpret_cast<Elf64_Sym *>((char *)mmapRet + symtabOff);
-    for (int i = 0; i < symtabEntry; i++) {
+    for (uint64_t i = 0; i < symtabEntry; i++) {
         const char *name = strtab + symtab[i].st_name;
         /* note here we must strictly keep all symbols, whether they are `useful' or not
          * this is because later we will access symtab using index
@@ -162,7 +161,7 @@ ObjectFile parseObjectFile(int fd, bool modify)
         auto relaCnt = relaSec.size / sizeof(Elf64_Rela);
         // auto &symtabSec = o.sections[".symtab"];
         // auto symtabStart = reinterpret_cast<Elf64_Sym *>((char *)mmapRet + symtabSec.off);
-        for (int i = 0; i < relaCnt; i++) {
+        for (uint64_t i = 0; i < relaCnt; i++) {
             /* zero initialize */
             RelocEntry re {};
             const auto &sym = o.symbolTable[ELF64_R_SYM(relaStart[i].r_info)];
