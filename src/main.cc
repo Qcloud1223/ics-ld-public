@@ -92,7 +92,7 @@ void recompileObjects(bool isPIE)
     }
 }
 
-void mergeObjects(int argc, char **argv, const char *filename)
+void mergeObjects(const char *filename)
 {
     int status;
     /* TODO: check linker script */
@@ -138,7 +138,7 @@ int main(int argc, char **argv)
 
     resolveSymbols(allObjects);
     
-    mergeObjects(argc, argv, ldConfig.outName);
+    mergeObjects(ldConfig.outName);
 
     reshapeObjFile(ldConfig.outName);
 
