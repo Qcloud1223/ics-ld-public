@@ -11,3 +11,9 @@ add_executable(ics-linker
     src/resolve.cc
     src/resolve.h
 )
+
+target_compile_options(ics-linker PRIVATE
+    -Wall
+    -Wextra
+    -Werror
+)
