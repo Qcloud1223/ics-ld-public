@@ -3,5 +3,5 @@ build/
 *.o
 tests/
 *.so
-testcases/test*
+testcases/test*/test*
 *.out
