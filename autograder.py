@@ -44,7 +44,9 @@ class TestCase:
         print("Command:", " ".join(self.command))
         
         try:
-            _ = subprocess.run(self.command, check=True, capture_output=True, encoding='utf-8')
+            p = subprocess.run(self.command, check=True, capture_output=True, encoding='utf-8')
+            print("Last words from stdout:", p.stdout, sep='\n')
+            print("Last words from stderr:", p.stderr, sep='\n')
         except subprocess.CalledProcessError as e:
             if e.returncode == -signal.SIGSEGV:
                 print("SIGSEGV received in your linker. Maybe you want to debug it with gdb.")
@@ -68,7 +70,9 @@ class TestCase:
             return
 
         try:
-            _ = subprocess.run(self.binName, check=True, capture_output=True, encoding='utf-8')
+            p = subprocess.run(self.binName, check=True, capture_output=True, encoding='utf-8')
+            print("Last words from stdout:", p.stdout, sep='\n')
+            print("Last words from stderr:", p.stderr, sep='\n')
         except subprocess.CalledProcessError as e:
             if e.returncode == self.retVal:
                 self.claimedScore += self.score
