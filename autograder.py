@@ -7,10 +7,10 @@ def pretty_print(i):
     print('#' * 30)
     print("#{}#".format(' ' * 28))
     if i < 10:
-        print('#   Evaluating TestCase ${}   #'.format(i))
+        print('#   Evaluating TestCase {}    #'.format(i))
     # guess we don't have over 100 testcases, hopefully...
     else:
-        print('#   Evaluating TestCase ${}  #'.format(i))
+        print('#   Evaluating TestCase {}   #'.format(i))
     print("#{}#".format(' ' * 28))
     print('#' * 30)
     print()
@@ -44,7 +44,9 @@ class TestCase:
         print("Command:", " ".join(self.command))
         
         try:
-            _ = subprocess.run(self.command, check=True, capture_output=True, encoding='utf-8')
+            p = subprocess.run(self.command, check=True, capture_output=True, encoding='utf-8')
+            print("Last words from stdout:", p.stdout, sep='\n')
+            print("Last words from stderr:", p.stderr, sep='\n')
         except subprocess.CalledProcessError as e:
             if e.returncode == -signal.SIGSEGV:
                 print("SIGSEGV received in your linker. Maybe you want to debug it with gdb.")
@@ -68,7 +70,9 @@ class TestCase:
             return
 
         try:
-            _ = subprocess.run(self.binName, check=True, capture_output=True, encoding='utf-8')
+            p = subprocess.run(self.binName, check=True, capture_output=True, encoding='utf-8')
+            print("Last words from stdout:", p.stdout, sep='\n')
+            print("Last words from stderr:", p.stderr, sep='\n')
         except subprocess.CalledProcessError as e:
             if e.returncode == self.retVal:
                 self.claimedScore += self.score
@@ -83,30 +87,33 @@ class TestCase:
             else:
                 print("Oops, your program does not return correctly.")
                 print("It's probably because references are bound to wrong symbols")
+                print("returncode:", e.returncode)
 
 if __name__ == '__main__':
+    test_list = [
+        TestCase('testcases/test0/test0.o', True, 20, 'Simple Single Relocation', 2, None, 'testcases/test0/glbvar.o'),
+        TestCase('testcases/test1/test1.o', False, 20, 'Direct Relocation', 3, None, 'testcases/test1/sum.o'),
+        TestCase("testcases/test2/test2.o", True, 20, 'Undefined Reference', None, "undefined reference for symbol foo\n", 'testcases/test2/extcall.o'),
+        TestCase("testcases/test3/test3.o", True, 20, 'Multiple Definition', None, "multiple definition for symbol a\n", 'testcases/test3/multidef1.o', 'testcases/test3/multidef2.o'),
+        TestCase("testcases/test4/test4.o", True, 20, 'Weak Definition', 2, None, 'testcases/test4/strongdef.o', 'testcases/test4/weakdef.o'),
+    ]
+
+    tid_list = []
+    totalScore = 0
+    try:
+        tid_list = [int(sys.argv[i][4:]) for i in range(1, len(sys.argv))]
+        if len(tid_list) == 0:
+            tid_list = [i for i in range(len(test_list))]
+        totalScore = sum([test_list[tid].score for tid in tid_list])
+    except Exception as e:
+        print(f"Invalid Test ID {sys.argv[1]}.")
+        sys.exit(-1)
+
     claimedScore = 0
 
-    test0 = TestCase('testcases/test0.o', True, 25, 'Simple Single Relocation', 2, None, 'testcases/glbvar.o')
-    pretty_print(0)
-    test0.eval()
-    claimedScore += test0.claimedScore
+    for tid in tid_list:
+        pretty_print(tid)
+        test_list[tid].eval()
+        claimedScore += test_list[tid].claimedScore
 
-    test1 = TestCase('testcases/test1.o', False, 25, 'Direct Relocation', 3, None, 'testcases/sum.o')
-    pretty_print(1)
-    test1.eval()
-    claimedScore += test1.claimedScore
-
-    test2 = TestCase("testcases/test2.o", True, 25, 'Undefined Reference', None, 
-                     "undefined reference for symbol foo\n", 'testcases/extcall.o')
-    pretty_print(2)
-    test2.eval()
-    claimedScore += test2.claimedScore
-
-    test3 = TestCase("testcases/test3.o", True, 25, 'Multiple Definition', None,
-                     "multiple definition for symbol a\n", 'testcases/multidef1.o', 'testcases/multidef2.o')
-    pretty_print(3)
-    test3.eval()
-    claimedScore += test3.claimedScore
-    
-    print(f"\nTotal score: {claimedScore}/100")
+    print(f"\nTotal score: {claimedScore}/{totalScore}")

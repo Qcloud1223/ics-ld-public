@@ -2,15 +2,19 @@ CC = gcc
 
 DIR = testcases
 
-SRC := $(wildcard $(DIR)/*.c)
+SRC := $(wildcard $(DIR)/**/*.c)
 OBJ := $(patsubst $(DIR)/%.c,$(DIR)/%.o,$(SRC))
 
 all: $(OBJ)
 	mkdir -p build && cd build && cmake .. && make
 	python3 autograder.py
 
-$(DIR)/%.o: $(DIR)/%.c | $(DIR)
+test%: $(OBJ)
+	mkdir -p build && cd build && cmake .. && make
+	python3 autograder.py $@
+
+$(DIR)/%.o: $(DIR)/%.c
 	$(CC) -c $< -o $@
 
 clean:
-	rm -rf $(DIR)/*.o
+	rm -rf $(DIR)/**/*.o $(DIR)/**/test*
