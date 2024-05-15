@@ -1,9 +1,6 @@
 int a = 1;
 
-void foo()
-{
-    a = 2;
-}
+void foo();
 
 int main()
 {

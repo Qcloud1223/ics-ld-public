@@ -14,7 +14,7 @@ test%: $(OBJ)
 	python3 autograder.py $@
 
 $(DIR)/%.o: $(DIR)/%.c
-	$(CC) -c $< -o $@
+	$(CC) -c -fcommon $< -o $@
 
 clean:
 	rm -rf $(DIR)/**/*.o $(DIR)/**/test*

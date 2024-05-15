@@ -70,7 +70,7 @@ class TestCase:
             return
 
         try:
-            p = subprocess.run(self.binName, check=True, capture_output=True, encoding='utf-8')
+            p = subprocess.run([self.binName], check=True, capture_output=True, encoding='utf-8')
             print("Last words from stdout:", p.stdout, sep='\n')
             print("Last words from stderr:", p.stderr, sep='\n')
         except subprocess.CalledProcessError as e:
@@ -95,7 +95,9 @@ if __name__ == '__main__':
         TestCase('testcases/test1/test1.o', False, 20, 'Direct Relocation', 3, None, 'testcases/test1/sum.o'),
         TestCase("testcases/test2/test2.o", True, 20, 'Undefined Reference', None, "undefined reference for symbol foo\n", 'testcases/test2/extcall.o'),
         TestCase("testcases/test3/test3.o", True, 20, 'Multiple Definition', None, "multiple definition for symbol a\n", 'testcases/test3/multidef1.o', 'testcases/test3/multidef2.o'),
-        TestCase("testcases/test4/test4.o", True, 20, 'Weak Definition', 2, None, 'testcases/test4/strongdef.o', 'testcases/test4/weakdef.o'),
+        TestCase("testcases/test4/test4.o", True, 10, 'Strong & Weak Definition', 2, None, 'testcases/test4/strongdef.o', 'testcases/test4/weakdef.o'),
+        TestCase("testcases/test5/test5.o", True, 5, 'Multiple Weak Definition', 3, None, 'testcases/test5/main.o', 'testcases/test5/weakdef1.o', 'testcases/test5/weakdef2.o'),
+        TestCase("testcases/test6/test6.o", True, 5, 'Local Definition', 2, None, 'testcases/test6/glbvar.o', 'testcases/test6/staticvar1.o', 'testcases/test6/staticvar2.o'),
     ]
 
     tid_list = []

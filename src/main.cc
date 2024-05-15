@@ -67,29 +67,11 @@ void relocBinaryFile(const char *filename, bool isPIE)
     int fd = open(binName, O_RDWR);
     if (fd == -1)
         ERROR_LOG("cannot open file: %s", binName);
-    auto &&o = parseObjectFile(fd, true);
+    auto o = std::move(parseObjectFile(fd, true));
     rebaseSymbols(allObjects, o);
     rebaseRela(allObjects);
     handleRela(allObjects, o, isPIE);
     close(fd);
-}
-
-void recompileObjects(bool isPIE)
-{
-    int status;
-    /* reset all object files for later merging */
-    for (const auto &name : allObjectNames) {
-        if (fork() == 0) {
-            char *src = strdup(name.c_str());
-            /* replace *.o to *.c */
-            src[strlen(src) - 1] = 'c';
-            /* disable common section since they are meant for compatibility 
-             * More at: https://stackoverflow.com/a/16836108/14033810
-             */
-            execlp("/usr/bin/gcc", "gcc", "-fno-common", "-c", src, "-o", name.c_str(), isPIE ? NULL : "-fno-pie", NULL);
-        }
-        wait(&status);
-    }
 }
 
 void mergeObjects(const char *filename)
@@ -132,8 +114,6 @@ int main(int argc, char **argv)
     
     parseArgs(argc, argv);
 
-    // recompileObjects(ldConfig.isPIE);
-
     parseObjFile();
 
     resolveSymbols(allObjects);
@@ -143,7 +123,7 @@ int main(int argc, char **argv)
     reshapeObjFile(ldConfig.outName);
 
     binaryGeneration(ldConfig.outName, ldConfig.isPIE);
-    
+
     relocBinaryFile(ldConfig.outName, ldConfig.isPIE);
 
     return 0;
