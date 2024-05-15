@@ -149,9 +149,6 @@ ObjectFile parseObjectFile(int fd, bool modify)
         s.offset = symtabOff + sizeof(Elf64_Sym) * i;
         s.index = symtab[i].st_shndx;
         o.symbolTable.push_back(s);
-        /* index the symbol just pushed in the symbol table */
-        // o.symbolsByIdx[symtab[i].st_shndx].push_back(&o.symbolTable.back());
-        o.symbolsByIdx[symtab[i].st_shndx].push_back(s);
     }
 
     /* parse and store RELA */

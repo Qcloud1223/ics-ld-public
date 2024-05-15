@@ -77,8 +77,6 @@ struct ObjectFile
 
     std::unordered_map<std::string, Section> sections;
     std::unordered_map<unsigned, Section *> sectionsByIdx;
-    // std::unordered_map<unsigned, std::vector<Symbol *>> symbolsByIdx;
-    std::unordered_map<unsigned, std::vector<Symbol>> symbolsByIdx;
     void *baseAddr;
     uint64_t size;
 };
