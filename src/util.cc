@@ -149,9 +149,6 @@ ObjectFile parseObjectFile(int fd, bool modify)
         s.offset = symtabOff + sizeof(Elf64_Sym) * i;
         s.index = symtab[i].st_shndx;
         o.symbolTable.push_back(s);
-        /* index the symbol just pushed in the symbol table */
-        // o.symbolsByIdx[symtab[i].st_shndx].push_back(&o.symbolTable.back());
-        o.symbolsByIdx[symtab[i].st_shndx].push_back(s);
     }
 
     /* parse and store RELA */
@@ -168,10 +165,8 @@ ObjectFile parseObjectFile(int fd, bool modify)
             re.offset = relaStart[i].r_offset;
             re.type = ELF64_R_TYPE(relaStart[i].r_info);
             re.name = sym.name;
-            /* a defined symbol */
-            if (sym.index != 0)
-                /* safe since size of symbol table won't change */
-                re.sym = &o.symbolTable[ELF64_R_SYM(relaStart[i].r_info)];
+            /* safe since size of symbol table won't change */
+            re.sym = &o.symbolTable[ELF64_R_SYM(relaStart[i].r_info)];
             re.addend = relaStart[i].r_addend;
             o.relocTable.emplace_back(re);
         }
