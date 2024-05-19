@@ -69,7 +69,6 @@ void relocBinaryFile(const char *filename, bool isPIE)
         ERROR_LOG("cannot open file: %s", binName);
     auto o = std::move(parseObjectFile(fd, true));
     rebaseSymbols(allObjects, o);
-    rebaseRela(allObjects);
     handleRela(allObjects, o, isPIE);
     close(fd);
 }

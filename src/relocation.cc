@@ -2,13 +2,13 @@
 
 #include <sys/mman.h>
 
-void rebaseRela(std::vector<ObjectFile> &allObject)
-{
-    /* Your code here */
-}
-
 void handleRela(std::vector<ObjectFile> &allObject, ObjectFile &mergedObject, bool isPIE)
 {
+    /* When there is more than 1 objects, 
+     * you need to adjust the offset of each RelocEntry
+     */
+    /* Your code here */
+
     /* in PIE executables, user code starts at 0xe9 by .text section */
     /* in non-PIE executables, user code starts at 0xe6 by .text section */
     uint64_t userCodeStart = isPIE ? 0xe9 : 0xe6;
