@@ -15,7 +15,7 @@ To build your implementation into a static linker:
 ```
 mkdir build
 cd build
-cmake ..
+cmake -DCMAKE_BUILD_TYPE=Debug ..
 cd ..
 make
 ```
