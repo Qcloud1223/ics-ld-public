@@ -15,5 +15,4 @@ add_executable(ics-linker
 target_compile_options(ics-linker PRIVATE
     -Wall
     -Wextra
-    -Werror
 )
