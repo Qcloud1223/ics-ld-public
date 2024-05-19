@@ -41,7 +41,7 @@ struct Symbol
     /* section index in the merged object file */
     uint16_t index;
 
-    Symbol(const Symbol&) = delete;
+    Symbol& operator= (const Symbol&) = delete;
 };
 
 struct RelocEntry
