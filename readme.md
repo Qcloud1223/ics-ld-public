@@ -16,6 +16,7 @@ To build your implementation into a static linker:
 mkdir build
 cd build
 cmake ..
+cd ..
 make
 ```
 
