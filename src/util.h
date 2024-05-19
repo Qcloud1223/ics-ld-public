@@ -40,6 +40,8 @@ struct Symbol
     uint64_t offset;
     /* section index in the merged object file */
     uint16_t index;
+
+    Symbol(const Symbol&) = delete;
 };
 
 struct RelocEntry
