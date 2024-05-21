@@ -16,6 +16,10 @@ test%: $(OBJ)
 $(DIR)/%.o: $(DIR)/%.c
 	$(CC) -c -fcommon $< -o $@
 
+# This rule override the wildcard one
+$(DIR)/test1/%.o: $(DIR)/test1/%.c
+	$(CC) -c -fcommon -fno-pie $< -o $@
+
 clean:
 	rm -rf $(DIR)/**/*.o $(DIR)/**/test*
 
