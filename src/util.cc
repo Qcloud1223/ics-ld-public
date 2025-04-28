@@ -63,7 +63,7 @@ void rebaseSymbols(std::vector<ObjectFile> &v, ObjectFile &mergedObj)
                     goto found;
                 }
             }
-            assert(false && "Symbol not found! This cannot be possible");
+            assert(false && "Failed to catch undefined symbols!");
 found:
             continue;
         }
